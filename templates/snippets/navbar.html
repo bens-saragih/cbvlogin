@@ -21,8 +21,17 @@
 		          User
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		         {% if user.is_authenticated %}
 		          <a class="dropdown-item" href="{% url 'artikel:create' %}">Tambah Artikel</a>
 		          <a class="dropdown-item" href="{% url 'artikel:manage' %}">Manage Artikel</a>
+
+		           		<a class="dropdown-item" href="#">{{user.username}}</a>
+				  		<a class="dropdown-item" href="{% url 'artikel:logout' %}">Logout</a>
+				  		<a class="dropdown-item" href="{% url 'artikel:password_change' %}">Change Pass</a>
+				  {% else %}
+				  		<a class="dropdown-item" href="{% url 'artikel:login' %}">Login</a>
+				  		<a class="dropdown-item" href="{% url 'artikel:signup' %}">Signup</a>
+		          {% endif %}
 			        </div>
 			      </div>
   	</div>

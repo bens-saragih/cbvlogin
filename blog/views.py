@@ -1,5 +1,5 @@
 from django.views.generic import TemplateView
-
+from django.shortcuts import render
 from artikel.views import ArtikelPerKategori
 
 class BlogHomeView(TemplateView,ArtikelPerKategori):
@@ -11,3 +11,6 @@ class BlogHomeView(TemplateView,ArtikelPerKategori):
 			'latest_artikel_list':querysets
 		}
 		return context
+
+def pesan(request):
+	return render(request,'pesan.html')

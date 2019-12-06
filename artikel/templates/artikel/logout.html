@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block page_title%}
+	Logout
+{% endblock %}
+
+{% block contents %}
+<form method="post">
+	{% csrf_token %}
+	{{form.as_p}}
+	<button type="submit">Logout</button>
+
+</form>
+{% endblock %}

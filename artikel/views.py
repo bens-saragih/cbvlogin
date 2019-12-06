@@ -1,18 +1,49 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.generic import ListView,DetailView,CreateView,DeleteView,UpdateView
 from .models import Artikel 
 from .forms import ArtikelForm
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import UserPassesTestMixin
 
-class ArtikelUpdateView(UpdateView):
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('artikel:login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'artikel/signup.html', {
+        'form': form
+    })
+
+#@user_passes_test(lambda user: Group.objects.get(name='updatef') in user.groups.all(),)
+class ArtikelUpdateView(UserPassesTestMixin,UpdateView):
+	login_url= None
 	form_class = ArtikelForm
 	model = Artikel
 	template_name = 'artikel/artikel_update.html'
 
-class ArtikelCreateView(CreateView):
+
+
+
+
+#@user_passes_test(lambda user: Group.objects.get(name='penulisf') in user.groups.all(),login_url='/message/')
+class ArtikelCreateView(UserPassesTestMixin,CreateView):
 	form_class = ArtikelForm
 	template_name = 'artikel/artikel_create.html'
+	permission_denied_message = 'Salah' 
+	def get_permission_denied_message(self):
+	    """
+	    Override this method to override the permission_denied_message attribute.
+	    """
+	    return self.permission_denied_message
 
+#@user_passes_test(lambda user: Group.objects.get(name='deletef') in user.groups.all(),login_url='/message/')
 class ArtikelDeleteView(DeleteView):
 	model = Artikel
 	template_name = "artikel/artikel_delete_confirmation.html"
